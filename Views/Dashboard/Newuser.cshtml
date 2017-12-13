@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "New User by Admin";
+}
+<div style="height: 200%; width: 100%">
+<div id="container" align="center">
+<div id="navbar" style="display: inline-flex; margin: auto 10; border-bottom: 1px solid black; width: 82%;">
+        <a href="/users/show/@ViewBag.user.UserId" style="text-decoration:none;"><h4 style="margin-right: 25px; color: red;">KONNEKTOЯ</h4></a>
+        <a href="/dashboard" style="margin-top: 20px; text-decoration:none; ">Users</a>
+        <a href="/users/edit" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">Edit Profile</a>
+        <a href="/home" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">Activities</a>
+        <a href="/createactivity" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">New Activity</a>
+        <a href="/logout" style="margin-left: 53%; margin-top: 20px; text-decoration:none; ">Log off</a>
+    </div>
+</div>
+<div id="mid" style="margin: 50px 25%; width: 350px;">
+        <h2>Add a new user</h2>
+        <a href="/dashboard/admin">Return to Dashboard</a>
+        @model connectingToDBTESTING.Models.User
+        <form action="/adding" method="post">
+            <table>
+                <tr><td><br></td></tr>
+                <tr><td>First Name</td> <td><input type="text" name="FirstName"></td></tr>
+                <tr><td>Last Name</td> <td> <input type="text" name="LastName"></td></tr>
+                <tr><td>Email</td> <td> <input type="text" name="Email"></td></tr>
+                <tr><td>Password</td> <td> <input type="text" name="Password"></td></tr>
+                <tr><td>Password Confirmation</td> <td> <input type="text" name="ConPassword"></td></tr>
+                <tr><td><br></td></tr>
+                 <tr><td><input type="submit" value="Create"></td></tr>
+                </table>
+            </form>
+            
+            
+    </div>
+    @{ if(ViewBag.errors!=null){
+                foreach(var error in ViewBag.errors)
+                        {
+                            //If there are any errors for a field...
+                            if(@error["Errors"].Count > 0)
+                            {
+                                // We show the first error for that field
+                                <p>@error["Errors"][0]["ErrorMessage"]</p>
+                            }
+                        }
+                    }
+            }
+</div>

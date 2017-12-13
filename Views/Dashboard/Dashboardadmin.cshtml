@@ -1,0 +1,34 @@
+@{
+    ViewData["Title"] = "Dashboard Admin";
+}
+<div style="height: 1000px; width: 100%">
+<div id="container" align="center">
+<div id="navbar" style="display: inline-flex; margin: auto 10; border-bottom: 1px solid black; width: 82%;">
+       <a href="/users/show/@ViewBag.user.UserId" style="text-decoration:none; "><h4 style="margin-right: 25px; color: red;">KONNEKTOЯ</h4></a>
+        <a href="/dashboard" style="margin-top: 20px; text-decoration:none; ">Users</a>
+        <a href="/users/edit" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">Edit Profile</a>
+        <a href="/home" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">Activities</a>
+        <a href="/createactivity" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">New Activity</a>
+        <a href="/logout" style="margin-left: 53%; margin-top: 20px; text-decoration:none; ">Log off</a>
+    </div>
+</div>
+<div id="mid" style="margin: 50px 25%; width: 5500px;">
+        <div>
+            <h2>Manage Users</h2>
+            <a href="/users/new">Add new user</a>
+        </div>
+        <table>
+            <tr><th>ID</th><th>Name</th><th>email</th><th>Register At</th><th>User Level</th><th>Action</th></tr>
+            <tr><td><br></td><td><br></td><td><br></td><td><br></td><td><br></td></tr>
+            @{
+                foreach(var x in ViewBag.AllU){
+                    <tr><td style="backgound-color:azure;">@x.UserId</td> <td><a href="/users/show/@x.UserId" style="text-decoration:none;">@x.FirstName @x.LastName</a></td><td style="backgound-color:azure;">@x.Email</td><td>@x.CreatedAt.ToString("MMM dd yyyy")</td><td>@x.Level</td><td style="backgound-color:azure;"><a href="/users/edit/@x.UserId" style="text-decoration:none;">edit</a> or <a href="/delete/@x.UserId" style="text-decoration:none;">delete</a></td></tr>
+                }
+                
+            }
+            
+        </table>
+        
+            
+    </div>
+</div>

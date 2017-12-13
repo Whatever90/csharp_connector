@@ -1,0 +1,121 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div style="height: 200%; width: 100%">
+<div id="container" align="center">
+<div id="navbar" style="display: inline-flex; margin: auto 10; border-bottom: 1px solid black; width: 82%;">
+        <a href="/users/show/@ViewBag.cur_user.UserId" style="text-decoration:none;"><h4 style="margin-right: 25px; color: red;">KONNEKTOЯ</h4></a>
+        <a href="/dashboard" style="margin-top: 20px; text-decoration:none; ">Users</a>
+        <a href="/users/edit" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">Edit Profile</a>
+        <a href="/home" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">Activities</a>
+        <a href="/createactivity" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">New Activity</a>
+        <a href="/logout" style="margin-left: 53%; margin-top: 20px; text-decoration:none; ">Log off</a>
+    </div>
+</div>
+<div id="mid" style="margin: 50px 25%; width: 650px;">
+    <div style="width: 300; height 200">
+            <img src="@ViewBag.user.Photo" width="300">
+        </div>
+    <div style="display: flex">
+        <table style="margin-right: 50px; width: 400px">
+            <tr><td><h2>@ViewBag.user.FirstName @ViewBag.user.LastName</h2></td></tr>
+            <tr><td>Registered at: </td><td>@ViewBag.user.CreatedAt.ToString("MMMM d, yyyy")</td></tr>
+            <tr><td>User ID: </td><td>#@ViewBag.user.UserId</td></tr>
+            <tr><td>Email: </td><td>@ViewBag.user.Email</td></tr>
+            <tr><td>Description: </td><td>@ViewBag.user.Description</td></tr>
+        </table>
+            
+        <div id="activities">
+            @{
+                if(ViewBag.user.Activities.Count>0){
+                    <h3>List of plans to go</h3>
+                }
+                
+            }
+            @{
+                foreach(var act in ViewBag.user.Activities){
+                    <a href="/activity/@act.ActivityId" style="text-decoration:none;">@act.Name</a><br>
+                }
+            }
+        </div>    
+    </div>
+            
+</div>
+
+<div style="display: inline-flex; width: 100%" align="center" >
+    <div id="mid" style="margin: 20px 25%; width: 250px;">
+        @model connectingToDBTESTING.Models.Message
+            <form action="/newmessage" method="post">
+                    <input type="text" name="Text">
+                    <input type="hidden" name="PostedToId" value=@ViewBag.user.UserId>
+                    <tr><td><input type="submit" value="Send"></td></tr>
+                    
+                </form>
+    </div>
+    <div style="margin: 20px 25%; width: 250px;">
+        @{ if(ViewBag.errors!=null){
+                    foreach(var error in ViewBag.errors)
+                            {
+                                //If there are any errors for a field...
+                                if(@error["Errors"].Count > 0)
+                                {
+                                    // We show the first error for that field
+                                    <p>@error["Errors"][0]["ErrorMessage"]</p>
+                                }
+                            }
+                        }
+                }
+    </div>
+</div>
+
+<div>
+    @{
+        foreach(var x in ViewBag.messages){
+            <div style="width: 82%; margin-bottom: 50px; margin: 4px 25%">
+                
+                <div style="border: 4px double #cccccc; width: 850px; background: #e6e6e6; display: inline-flex">
+                    <div style="width: 130px">
+                        <a href="/users/show/@x.User.UserId"><img src="@x.User.Photo" width=130></a>
+                        <a href="/users/show/@x.User.UserId" style="text-decoration:none;margin-left:40px;">@x.User.FirstName</a>
+                    </div>
+                    <div style="margin-left: 30%;">
+                        <p style="font-family: Arial, Helvetica, sans-serif;">@x.Text</p>
+                        <p style="font-size:x-small; color: grey">@x.CreatedAt.ToString("R")</p>
+                    </div>
+                </div>
+                <div>   
+                    @{
+                        foreach(var comment in x.Comments){
+                            
+                            <div style="border: 1px solid #d9d9d9; width: 700px; background: #f2f2f2; display: inline-flex; margin-left:100px">
+                                <div style="width: 100px;">
+                                    <a href="/users/show/@comment.User.UserId"><img src="@comment.User.Photo" width=100></a>
+                                    
+                                </div>
+                                <p><a href="/users/show/@comment.User.UserId" style="text-decoration:none; margin-left:40px;">@comment.User.FirstName</a> commented:</p>
+                                <div style="margin-left: 10%;">
+                                    <p style="font-family: Arial, Helvetica, sans-serif;">@comment.Text</p>
+                                    
+                                </div>
+                                <p style="font-size:x-small; margin-left: 10%; color: grey">@comment.CreatedAt.ToString("R")</p>
+                            </div>
+                        }
+                    }
+                </div>
+                <div style="margin: 1px 50%; display: inline-flex; width: 300px">
+                    <form action="/newcomment" method="post">
+                        <input type="text" name="text">
+                        <input type="hidden" name="mid" value=@x.MessageId>
+                        <input type="hidden" name="uid" value=@ViewBag.cur_user.UserId>
+                        <input type="hidden" name="pid" value=@ViewBag.user.UserId>
+                        <input type="submit" value="Comment">
+                        
+                    </form>
+                </div>
+            </div>
+            
+                
+        }
+    }
+</div>
+</div>

@@ -1,0 +1,160 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div style="height: 1000px; width: 100%">
+<div id="container" align="center">
+<div id="navbar" style="display: inline-flex; margin: auto 10; border-bottom: 1px solid black; width: 82%;">
+        <a href="/users/show/@ViewBag.cur_user.UserId" style="text-decoration:none;"><h4 style="margin-right: 25px; color: red;">KONNEKTOЯ</h4></a>
+        <a href="/dashboard" style="margin-top: 20px; text-decoration:none; ">Users</a>
+        <a href="/users/edit" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">Edit Profile</a>
+        <a href="/home" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">Activities</a>
+        <a href="/createactivity" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">New Activity</a>
+        <a href="/logout" style="margin-left: 53%; margin-top: 20px; text-decoration:none; ">Log off</a>
+    </div>
+</div>
+
+<div id="container" align="center">
+    <div style="margin-top: 20px">
+        <table>
+            <tr>
+                <th>Activity</th>
+                <th>Date and time</th>
+                <th>Duration</th>
+                <th>Event Coordinator</th>
+                <th>Number of Participants</th>
+                <th>Actions</th>
+            </tr>
+            @{
+                foreach(var x in ViewBag.AllA){
+                    <tr>
+                        <td style="background-color: azure; width:200px;" align="center"><a href="/activity/@x.ActivityId" style="text-decoration:none;">@x.Name</a></td>
+                        <td>@x.Date.ToString("MMM d yyyy") at @x.Date.ToString("t")</td>
+                        <td style="background-color: azure;" align="center"><span style="margin:10px 30px;">@x.Duration</span></td>
+                        <td align="center"><a href="/users/show/@x.User.UserId" style="text-decoration:none;">@x.User.FirstName</a></td>
+                        <td style="background-color: azure;" align="center">@x.GuestsAmount</td>
+                        @if(x.UserId==ViewBag.cur_user.UserId){
+                            <td align="center"><a href="deleteact/@x.ActivityId" style="text-decoration:none;"><span style="color: red;">Delete</span></a></td>
+                        }else{
+                            
+                                var here = 0;
+                                foreach(var guest in x.Guests){
+                                    if(guest.UserId==ViewBag.cur_user.UserId){
+                                        here = 1;
+                                    }
+                                }
+                                if(here==0){
+                                    <td align="center"><a href="attend/@x.ActivityId" style="text-decoration:none; color: green">Attend</a></td>
+                                } else {
+                                    <td align="center"><a href="changeyourmind/@x.ActivityId" style="text-decoration:none; color: red">Change your mind</a></td>
+                                }
+                        }
+                            
+                    </tr>
+                }
+                        
+                
+            }
+        </table>
+
+    </div>
+    
+    <div style='height:400px;width:520px;'>
+                <div id='map_canvas' style='height:400px;width:520px;'>
+                    </div>
+                    <style>#map_canvas img{max-width:none!important;background:none!important}</style>
+                </div> 
+<script src='https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDoU7cYB8RZkezOQZ2a1zs9U7jM0RifkwU'></script>
+        
+
+        <script type='text/javascript'>
+        
+        function init_map(){
+            var dict = [[]];
+            @foreach (var d in ViewBag.AllA)
+            {
+                @:dict[@d.ActivityId] = ["@d.Address"];
+                @:dict[@d.ActivityId][1] = "@d.Name";
+            }
+            console.log(dict)
+            var map;
+            var bounds = new google.maps.LatLngBounds();
+            var mapOptions = {
+                mapTypeId: 'roadmap'
+            };
+            map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+            map.setTilt(45);
+            var infoWindow = new google.maps.InfoWindow()
+            var total1 = 0;
+            var total2 = 0;
+            var total3 = 0;
+            for(let key in dict) {
+                if (dict[key][0]==undefined){
+                    continue; 
+                }
+                
+                console.log(dict[key])
+                var addresses = dict[key][0]
+                 var lat
+                 var lng
+                 var position
+                 $.getJSON('http://maps.googleapis.com/maps/api/geocode/json?address='+addresses+'&sensor=false', null, function (data) {
+                     console.log("========================")
+                     console.log(dict[key])
+                     console.log("========================")
+                     if(data){
+                        if(data["status"]!="ZERO_RESULTS"){
+                            total3++;
+                            console.log(data["results"][0]["geometry"]["location"]["lat"])
+                            lat = data["results"][0]["geometry"]["location"]["lat"]
+                            total1+=lat
+                            console.log("total latitude is = ", total1)
+                            console.log(lat)
+                            lng = data["results"][0]["geometry"]["location"]["lng"]
+                            total2+=lng
+                            console.log("total longitude is = ",total2)
+                            
+                            console.log(lng)
+                            position = new google.maps.LatLng(lat, lng);
+                            bounds.extend(position);
+                            marker = new google.maps.Marker({
+                                position: position,
+                                map: map,
+                                title: dict[key][1],
+                            });
+                            google.maps.event.addListener(marker, 'click', (function(marker, key) {
+                                return function() {
+                                    infoWindow.setContent(`<a href="/activity/${key[0]}">${dict[key][1]}</a>`);
+                                    infoWindow.open(map, marker);
+                                }
+                            })(marker, key));
+                        }
+                     }
+                })
+                        
+                        
+            map.fitBounds(bounds);
+            }
+            console.log(total1/total3," ", total2/total3)
+            var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
+                this.setZoom(7);
+                this.setCenter(new google.maps.LatLng(total1/total3,total2/total3));
+                google.maps.event.removeListener(boundsListener);
+            });
+           
+        }   
+                google.maps.event.addDomListener(window, 'load', init_map);
+                
+                
+                
+                
+                </script>
+
+
+
+@{
+    if(ViewBag.act_err != null){
+        <p>@ViewBag.act_err</p>
+    }
+}
+</div>
+</div>

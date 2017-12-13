@@ -1,0 +1,201 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div style="height: 1000px; width: 100%">
+<div id="container" align="center">
+    <div id="navbar" style="display: inline-flex; margin: auto 10; border-bottom: 1px solid black; width: 82%;">
+        <a href="/users/show/@ViewBag.cur_user.UserId" style="text-decoration: none"><h4 style="margin-right: 25px; color: red;">KONNEKTOЯ</h4></a>
+        <a href="/dashboard" style="margin-top: 20px; text-decoration:none; ">Users</a>
+        <a href="/users/edit" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">Edit Profile</a>
+        <a href="/home" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">Activities</a>
+        <a href="/createactivity" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">New Activity</a>
+        <a href="/logout" style="margin-left: 53%; margin-top: 20px; text-decoration:none; ">Log off</a>
+        </div>
+    </div>
+    
+    <div style="width: 100%" align="center" >
+        <h1 style="color:red">@ViewBag.act.Name</h1>
+
+        @{
+            if(ViewBag.act2_err != null){
+                <p style="color: red;">@ViewBag.act2_err</p>
+            }
+        }
+
+        <h2>@ViewBag.act.Date.ToString("U")</h2>
+        <h2>@ViewBag.act.Duration</h2>
+        <h3>Event Coordinator: <a href="/users/show/@ViewBag.act.User.UserId" style="text-decoration: none; color: black">@ViewBag.act.User.FirstName</a></h3>
+        <h3>Description: </h3>
+        <p>@ViewBag.act.Description</p>
+        <h4>Address: @ViewBag.act.Address</h4>
+        <script src='https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDoU7cYB8RZkezOQZ2a1zs9U7jM0RifkwU'></script>
+        @{
+            if(ViewBag.act.Address!=null){
+                    <div id="map" style='overflow:hidden;height:400px;width:520px;'>
+                 
+                    <div id='gmap_canvas' style='height:400px;width:520px;'>
+                    </div>
+                    <style>#gmap_canvas img{max-width:none!important;background:none!important}</style>
+                </div> 
+            }
+        }
+        
+            
+        <script type='text/javascript'>
+            function init_map(){
+                 var addresses = "@ViewBag.act.Address"
+                 var lat
+                 var lng
+                 if(addresses == null){
+                     addresses = "5254 11th ave NE, Seattle, WA"
+                     
+                 }
+                 console.log(addresses)
+                 $.getJSON('http://maps.googleapis.com/maps/api/geocode/json?address='+addresses+'&sensor=false', null, function (data) {
+                     
+                     if(data["status"] != "ZERO_RESULTS"){
+                        console.log(data)
+                        console.log(data["results"][0]["geometry"]["location"]["lat"])
+                        lat = data["results"][0]["geometry"]["location"]["lat"]
+                        console.log(lat)
+                        lng = data["results"][0]["geometry"]["location"]["lng"]
+                        console.log(lng)
+                      
+                     
+                    var myOptions = {
+                        zoom:15,
+                        center:new google.maps.LatLng(lat,lng),
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                        };
+                    
+                    map = new google.maps.Map(document.getElementById('gmap_canvas'), myOptions);
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: new google.maps.LatLng(lat, lng)
+                        });
+                    infowindow = new google.maps.InfoWindow({content:addresses});
+                    google.maps.event.addListener(marker, 'click', function(){
+                        infowindow.open(map,marker);
+                        });
+                        infowindow.open(map,marker);
+                     }else{
+                         document.getElementById("map").remove(); 
+                     }
+                 })
+
+            }
+                
+                google.maps.event.addDomListener(window, 'load', init_map);
+                
+                
+                
+                
+                </script>
+        @{
+            if(ViewBag.act.UserId==ViewBag.cur_user.UserId){
+                        <a href="/delete/@ViewBag.act.ActivityId" style="text-decoration: none"><span style="color: red;"><h3>Delete</h3></span></a>
+                    }else{
+                        
+                            var here = 0;
+                            foreach(var guest in ViewBag.act.Guests){
+                                if(guest.UserId==ViewBag.cur_user.UserId){
+                                    here = 1;
+                                }
+                            }
+                            if(here==0){
+                                <a href="/join/@ViewBag.act.ActivityId" style="text-decoration: none; color: green"><h3>Join</h3></a>
+                            } else {
+                                <a href="/cancel/@ViewBag.act.ActivityId" style="text-decoration: none; color: red"><h3>Change your mind</h3></a>
+                            }
+                    }
+        }
+        <h4>Participants:</h4>
+        
+        @{
+            foreach(var guest in ViewBag.act.Guests){
+                <p><a href="/users/show/@guest.User.UserId" style="text-decoration: none; color: black">@guest.User.FirstName @guest.User.LastName</a></p>
+            }
+        }
+                
+
+
+    </div>  
+
+<div style="display: inline-flex; width: 100%" align="center" >
+    <div id="mid" style="margin: 20px 45%; width: 250px;">
+         <form action="/newamessage" method="post">
+                    <input type="text" name="Text">
+                    <input type="hidden" name="PostedToId" value=@ViewBag.act.ActivityId>
+                    <tr><td><input type="submit" value="Send"></td></tr>
+                    
+                </form>
+    </div>
+    <div style="margin: 20px 25%; width: 250px;">
+        @{ if(ViewBag.amerrors!=null){
+                    <p style="color: red">ViewBag.amerrors</p>
+                           
+                        }
+                }
+    </div>
+</div>
+
+<div>
+    @{
+        foreach(var x in ViewBag.messages){
+            <div style="width: 82%; margin-bottom: 50px; margin: 4px auto; " align="center">
+
+                
+                <div style="border: 4px double #cccccc; width: 850px; background: #e6e6e6; display: inline-flex">
+                    <div style="width: 130px">
+                        <a href="/users/show/@x.User.UserId"><img src="@x.User.Photo" width=130></a>
+                        <a href="/users/show/@x.User.UserId" style="text-decoration: none; margin-left:40px; color: black">@x.User.FirstName</a>
+                    </div>
+                    <div style="margin-left: 30%;">
+                        <p style="font-family: Arial, Helvetica, sans-serif;">@x.Text</p>
+                        <p style="font-size:x-small; color: grey">@x.CreatedAt.ToString("R")</p>
+                    </div>
+                </div>
+                
+                <div>   
+                    @{
+                        foreach(var comment in x.Acomments){
+                            <div style="border: 1px solid #d9d9d9; width: 700px; background: #f2f2f2; display: inline-flex; margin-left:100px">
+                                <div style="width: 100px;">
+                                    <a href="/users/show/@comment.User.UserId"><img src="@comment.User.Photo" width=100></a>
+                                    
+                                </div>
+                                <p><a href="/users/show/@comment.User.UserId" style="text-decoration: none; margin-left:40px; color: black">@comment.User.FirstName</a> commented:</p>
+                                <div style="margin-left: 10%;">
+                                    <p style="font-family: Arial, Helvetica, sans-serif;">@comment.Text</p>
+                                    
+                                </div>
+                                <p style="font-size:x-small; margin-left: 10%; color: grey">@comment.CreatedAt.ToString("R")</p>
+                            </div>
+                        }
+                    }
+                </div>
+                <div style="margin: 1px 60%; display: inline-flex; width: 300px">
+                    <form action="/newacomment" method="post">
+                        <input type="text" name="text">
+                        <input type="hidden" name="mid" value=@x.AmessageId>
+                        <input type="hidden" name="uid" value=@ViewBag.cur_user.UserId>
+                        <input type="hidden" name="pid" value=@ViewBag.act.ActivityId>
+                        <input type="submit" value="Comment">
+                        
+                    </form>
+                </div>
+                <div style="margin: 20px 25%; width: 250px;">
+                    @{ if(ViewBag.acerrors!=null){
+                                <p style="color: red">ViewBag.acerrors</p>
+                                    
+                                    }
+                            }
+                </div>
+            </div>
+            
+                
+        }
+    }
+</div>
+</div>
+</div>

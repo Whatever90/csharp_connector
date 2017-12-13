@@ -1,0 +1,16 @@
+C:\Users\user1\Desktop\coding\C#\Fundamentals\connectingToDBTESTING\bin\Debug\netcoreapp1.1\connectingToDBTESTING.deps.json
+C:\Users\user1\Desktop\coding\C#\Fundamentals\connectingToDBTESTING\bin\Debug\netcoreapp1.1\connectingToDBTESTING.runtimeconfig.json
+C:\Users\user1\Desktop\coding\C#\Fundamentals\connectingToDBTESTING\bin\Debug\netcoreapp1.1\connectingToDBTESTING.runtimeconfig.dev.json
+C:\Users\user1\Desktop\coding\C#\Fundamentals\connectingToDBTESTING\bin\Debug\netcoreapp1.1\connectingToDBTESTING.dll
+C:\Users\user1\Desktop\coding\C#\Fundamentals\connectingToDBTESTING\bin\Debug\netcoreapp1.1\connectingToDBTESTING.pdb
+C:\Users\user1\Desktop\coding\C#\Fundamentals\connectingToDBTESTING\obj\Debug\netcoreapp1.1\connectingToDBTESTING.AssemblyInfo.cs
+C:\Users\user1\Desktop\coding\C#\Fundamentals\connectingToDBTESTING\obj\Debug\netcoreapp1.1\connectingToDBTESTING.dll
+C:\Users\user1\Desktop\coding\C#\Fundamentals\connectingToDBTESTING\obj\Debug\netcoreapp1.1\connectingToDBTESTING.pdb
+C:\Users\user1\Desktop\coding\C#\Fundamentals\dashboard\connectingToDBTESTING\bin\Debug\netcoreapp1.1\connectingToDBTESTING.deps.json
+C:\Users\user1\Desktop\coding\C#\Fundamentals\dashboard\connectingToDBTESTING\bin\Debug\netcoreapp1.1\connectingToDBTESTING.runtimeconfig.json
+C:\Users\user1\Desktop\coding\C#\Fundamentals\dashboard\connectingToDBTESTING\bin\Debug\netcoreapp1.1\connectingToDBTESTING.runtimeconfig.dev.json
+C:\Users\user1\Desktop\coding\C#\Fundamentals\dashboard\connectingToDBTESTING\bin\Debug\netcoreapp1.1\connectingToDBTESTING.dll
+C:\Users\user1\Desktop\coding\C#\Fundamentals\dashboard\connectingToDBTESTING\bin\Debug\netcoreapp1.1\connectingToDBTESTING.pdb
+C:\Users\user1\Desktop\coding\C#\Fundamentals\dashboard\connectingToDBTESTING\obj\Debug\netcoreapp1.1\connectingToDBTESTING.AssemblyInfo.cs
+C:\Users\user1\Desktop\coding\C#\Fundamentals\dashboard\connectingToDBTESTING\obj\Debug\netcoreapp1.1\connectingToDBTESTING.dll
+C:\Users\user1\Desktop\coding\C#\Fundamentals\dashboard\connectingToDBTESTING\obj\Debug\netcoreapp1.1\connectingToDBTESTING.pdb

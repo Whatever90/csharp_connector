@@ -1,0 +1,44 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div>
+
+    @{ if(ViewBag.errors!=null){
+        foreach(var error in ViewBag.errors)
+                {
+                    //If there are any errors for a field...
+                    if(@error.Errors.Count > 0)
+                    {
+                        // We show the first error for that field
+                        <p>@error.Errors[0].ErrorMessage</p>
+                    }
+                }
+    }
+    }
+    @{ if(ViewBag.logerr!=null){
+        <p>@ViewBag.logerr</p>
+    }
+    }
+    
+        
+    
+</div>
+<p>TESTING</p>
+@model connectingToDBTESTING.Models.User
+<form action="/store" method="post">
+    <p>FIrst Name: <input type="text" name="FirstName"></p>
+    <p>Last Name: <input type="text" name="LastName"></p>
+    <p>Email: <input type="text" name="Email"></p>
+    <p>Password: <input type="text" name="Password"></p>
+    <p>Password Confirmation: <input type="text" name="ConPassword"></p>
+    <input type="submit" value="Register">
+    
+</form>
+<br>
+<form action="/login" method="post">
+    <p>Email: <input type="text" name="Email"></p>
+    <p>Password: <input type="text" name="Password"></p>
+    <input type="submit" value="Login">
+    
+</form>
+

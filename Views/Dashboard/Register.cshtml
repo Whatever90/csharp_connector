@@ -1,0 +1,49 @@
+@{
+    ViewData["Title"] = "Register";
+}
+<div style="height: 1000px; width: 100%">
+<div id="container" align="center">
+<div id="navbar" style="display: inline-flex; margin: auto 10; border-bottom: 1px solid black; width: 82%;">
+        <h4 style="margin-right: 25px; color: red">KONNEKTOЯ</h4>
+        <a href="/" style="text-decoration:none; margin-top: 20px;">Home</a>
+        <a href="/signin" style="text-decoration:none; margin-left: 83%; margin-top: 20px;">Sign in</a>
+    </div>
+</div>
+<div id="mid" style="margin: 50px 25%; width: 350px;">
+        <h2>Registration</h2>
+        @model connectingToDBTESTING.Models.User
+        <form action="/registrating" method="post">
+            <table>
+                <tr><td><br></td></tr>
+                <tr><td>First Name</td> <td><input type="text" name="FirstName"></td></tr>
+                <tr><td>Last Name</td> <td> <input type="text" name="LastName"></td></tr>
+                <tr><td>Email</td> <td> <input type="text" name="Email"></td></tr>
+                <tr><td>Password</td> <td> <input type="password" name="Password"></td></tr>
+                <tr><td>Password Confirmation</td> <td> <input type="password" name="ConPassword"></td></tr>
+                <tr><td><br></td></tr>
+                 <tr><td><input type="submit" value="Register"></td></tr>
+                </table>
+            </form>
+           
+            
+    </div>
+    <div id="econtainer" align="center">
+    @{
+        if(ViewBag.exists!=null){
+            <p style="color:red;">@ViewBag.exists</p>
+        }
+    }
+     @{ if(ViewBag.errors!=null){
+                foreach(var error in ViewBag.errors)
+                        {
+                            //If there are any errors for a field...
+                            if(@error["Errors"].Count > 0)
+                            {
+                                // We show the first error for that field
+                                <p style="color:red;">@error["Errors"][0]["ErrorMessage"]</p>
+                            }
+                        }
+                    }
+            }
+    </div>
+</div>

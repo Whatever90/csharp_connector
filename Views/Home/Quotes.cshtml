@@ -1,0 +1,43 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+<h1>Hey @ViewBag.cur_user</h1>
+<a href="logout">LOGOUT</a>
+@model connectingToDBTESTING.Models.Message
+
+
+<form action="/newmessage" method="post">
+    <p>Message: <input type="text" name="Text"></p>
+    <input type="submit" value="Send">
+    
+</form>
+ @{
+    foreach(Dictionary<string, object> message in ViewBag.AM){
+        
+            <h2>@message["first_name"] says: <span style="color:red";>@message["text"] </span> <span style="color:silver";>@message["created_at"] </span> </h2>
+            <p><span style="color: silver";>-----Comments-----</span></p>
+            foreach(Dictionary<string, object> comment in ViewBag.AC){
+                var mes_id = (int)message["id_mes"];
+                var com_id = (int)comment["message_id"];
+                  if(mes_id == com_id){
+                        <p>@comment["first_name"] commented: @comment["text_com"] <span style="color:silver";>@comment["commented_at"].ToString() </span></p>
+                    } 
+                }
+            
+    
+ 
+        
+
+
+        
+            <form action="/newcomment" method="post">
+                <p>-----Add a comment-----</p>
+                <input type="text" name="comment">
+                <input type="submit" value="Send">
+                <input type="hidden" name="mes_id" value=@message["id_mes"]>
+            </form>
+            <br>
+        
+    } 
+ }
+

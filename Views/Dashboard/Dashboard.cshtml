@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<div style="height: 1000px; width: 100%">
+<div id="container" align="center">
+<div id="navbar" style="display: inline-flex; margin: auto 10; border-bottom: 1px solid black; width: 82%;">
+        <a href="/users/show/@ViewBag.user.UserId" style="text-decoration:none; "><h4 style="margin-right: 25px; color: red;">KONNEKTOЯ</h4></a>
+        <a href="/dashboard" style="margin-top: 20px; text-decoration:none; ">Users</a>
+        <a href="/users/edit" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">Edit Profile</a>
+        <a href="/home" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">Activities</a>
+        <a href="/createactivity" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">New Activity</a>
+        <a href="/logout" style="margin-left: 53%; margin-top: 20px; text-decoration:none; ">Log off</a>
+    </div>
+</div>
+<div id="mid" style="margin: 50px 25%; width: 5500px;">
+        <h2>All users</h2>
+        <table>
+            <tr><th>ID</th><th style="background-color:azure;">Name</th><th>email</th><th style="background-color:azure;">Register At</th></tr>
+            <tr><td> </td><td> </td><td> </td><td> </td></tr>
+            @{
+                foreach(var x in ViewBag.AllU){
+                    <tr><td>@x.UserId</td> <td style="background-color:azure;"><a href="users/show/@x.UserId" style="text-decoration:none; ">@x.FirstName @x.LastName</a></td><td>@x.Email </td><td style="background-color:azure;">@x.CreatedAt.ToString("MMM dd yyyy")</td></tr>
+                }
+            }
+            
+        </table>
+        
+            
+    </div>
+</div>

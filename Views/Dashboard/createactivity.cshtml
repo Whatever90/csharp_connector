@@ -1,0 +1,56 @@
+@{
+    ViewData["Title"] = "Create Activity";
+}
+<div style="height: 1000px; width: 100%">
+<div id="container" align="center">
+<div id="navbar" style="display: inline-flex; margin: auto 10; border-bottom: 1px solid black; width: 82%;">
+        <a href="/users/show/@ViewBag.user.UserId" style="text-decoration: none; "><h4 style="margin-right: 25px; color: red;">KONNEKTOЯ</h4></a>
+        <a href="/dashboard" style="margin-top: 20px; text-decoration:none; ">Users</a>
+        <a href="/users/edit" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">Edit Profile</a>
+        <a href="/home" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">Activities</a>
+        <a href="/createactivity" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">New Activity</a>
+        <a href="/logout" style="margin-left: 53%; margin-top: 20px; text-decoration:none; ">Log off</a>
+    </div>
+</div>
+<div id="container" align="center">
+    
+    
+
+    
+    
+            <form action="/newact" method="post" style="margin-top: 50px;">
+            <table>
+                <tr><td>Name</td> <td><input type="text" name="Name"></td></tr>
+                <tr><td>Duration</td> <td> <input type="number" name="duration1"><select name="duration2">
+                                                                                        <option value="min">Minutes</option>
+                                                                                        <option value="hours">Hours</option>
+                                                                                        <option value="days">Days</option>
+                                                                                    </select></td></tr>
+                <tr><td>Date</td> <td> <input type="datetime-local" name="Date"></td></tr>
+                <tr><td>Description</td> <td><input type="text" name="description"></td></tr>
+                <tr><td>Address</td> <td><input type="text" name="address"></td></tr>
+                </table>
+                <input type="submit" value="Create">
+                
+            </form>
+
+
+@{ if(ViewBag.act_errors!=null){
+        foreach(var error in ViewBag.act_errors)
+                {
+                    //If there are any errors for a field...
+                    if(@error["Errors"].Count > 0)
+                    {
+                        // We show the first error for that field
+                        <p style="color: red;">@error["Errors"][0]["ErrorMessage"]</p>
+                    }
+                }
+    }
+    }
+    @{
+        if(ViewBag.act2_errors!=null){
+            <p style="color: red">@ViewBag.act2_errors</p>
+        }
+    }
+</div>
+</div>

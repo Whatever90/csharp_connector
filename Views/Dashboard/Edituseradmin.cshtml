@@ -1,0 +1,63 @@
+@{
+    ViewData["Title"] = "Edit User Admin";
+}
+<div style="height: 200%; width: 100%">
+<div id="container" align="center">
+<div id="navbar" style="display: inline-flex; margin: auto 10; border-bottom: 1px solid black; width: 82%;">
+        <a href="/users/show/@ViewBag.user2.UserId" style="text-decoration:none;"><h4 style="margin-right: 25px; color: red;">KONNEKTOЯ</h4></a>
+        <a href="/dashboard" style="margin-top: 20px; text-decoration:none; ">Users</a>
+        <a href="/users/edit" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">Edit Profile</a>
+        <a href="/home" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">Activities</a>
+        <a href="/createactivity" style="margin-top: 20px; margin-left: 3%; text-decoration:none; ">New Activity</a>
+        <a href="/logout" style="margin-left: 53%; margin-top: 20px; text-decoration:none; ">Log off</a>
+    </div>
+</div>
+<div style="display: inline-flex;">
+    <div id="mid" style="margin: 50px 25%; width: 350px;">
+        <h2>Edit Information</h2>
+        <form action="/editing" method="post">
+            <table>
+                <tr><td><br></td></tr>
+                <tr><td>First Name</td> <td><input type="text" name="fname" value=@ViewBag.user.FirstName></td></tr>
+                <tr><td>Last Name</td> <td> <input type="text" name="lname" value=@ViewBag.user.LastName></td></tr>
+                <tr><td>Email</td> <td> <input type="text" name="email" value=@ViewBag.user.Email></td></tr>
+                <input type="hidden" name="id" value=@ViewBag.user.UserId>
+                <tr><td>Level</td> <td><select name="level">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                    </select></td></tr>
+                <tr><td><br></td></tr>
+                 <tr><td><input type="submit" value="Save"></td></tr>
+                </table>
+            </form>
+           
+            
+    </div>
+    <div id="mid" style="margin: 50px 5%; width: 350px;">
+        <h2>Change Password</h2>
+            <form action="/passwordupd" method="post">
+                <table>
+                    <tr><td><br></td></tr>
+                    <tr><td>Password</td> <td> <input type="text" name="Password"></td></tr>
+                    <tr><td>Password Confirmation</td> <td> <input type="text" name="ConPassword"></td></tr>
+                    <input type="hidden" name="id" value=@ViewBag.user.UserId>
+                    <tr><td><br></td></tr>
+                    <tr><td><input type="submit" value="Update Password"></td></tr>
+                    </table>
+                </form>
+                @{ 
+            if(ViewBag.errors!=null){
+                foreach(var error in ViewBag.errors)
+                    {
+                        if(@error["Errors"].Count > 0)
+                            {
+                                <p>@error["Errors"][0]["ErrorMessage"]</p>
+                            }
+                        }
+                }
+            
+        }
+    </div>
+    
+</div>
+</div>
