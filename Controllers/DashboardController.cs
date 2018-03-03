@@ -36,7 +36,7 @@ namespace connectingToDBTESTING.Controllers
         }
         [HttpGet]
         [Route("signin")]
-        public IActionResult signin()
+        public IActionResult Signin()
         {
             string login_err = HttpContext.Session.GetObjectFromJson<string>("login_errors");
             HttpContext.Session.SetObjectAsJson("login_errors", null); 
@@ -46,13 +46,13 @@ namespace connectingToDBTESTING.Controllers
         }
         [HttpPost]
         [Route("signing")]
-        public IActionResult signing(string email, string password)
+        public IActionResult Signing(string email, string password)
         {
             User RUser = _context.Users.SingleOrDefault(user => user.Email == email);
             if(RUser==null){
                 string errors = "Invalid email or password";
                 HttpContext.Session.SetObjectAsJson("login_errors", errors); 
-                return RedirectToAction("signin");
+                return RedirectToAction("Signin");
             }
             Console.WriteLine("++++++++++++++++++");
             Console.WriteLine(RUser.Password);
@@ -64,12 +64,12 @@ namespace connectingToDBTESTING.Controllers
             }
             string errors2 = "Invalid email or password";
             HttpContext.Session.SetObjectAsJson("login_errors", errors2); 
-            return RedirectToAction("signin");
+            return RedirectToAction("Signin");
         }
         
         [HttpGet]
         [Route("register")]
-        public IActionResult register()
+        public IActionResult Register()
         {
             List<Dictionary<string, object>> err = HttpContext.Session.GetObjectFromJson<List<Dictionary<string, object>>>("reg_errors"); 
             ViewBag.errors = err;
@@ -78,8 +78,8 @@ namespace connectingToDBTESTING.Controllers
             return View();
         }
         [HttpPost]
-        [Route("registrating")]
-        public IActionResult registrating(User model)
+        [Route("Registrating")]
+        public IActionResult Registrating(User model)
         {
             if(ModelState.IsValid){
                 User CurrentUser = new User(){
@@ -102,7 +102,7 @@ namespace connectingToDBTESTING.Controllers
                 }else{
                     string exists = "Such email already in use";
                     HttpContext.Session.SetObjectAsJson("exists", exists);
-                    return RedirectToAction("register");
+                    return RedirectToAction("Register");
                 }
                 
             }else{
@@ -112,7 +112,7 @@ namespace connectingToDBTESTING.Controllers
                 Console.WriteLine(messages);
                 HttpContext.Session.SetObjectAsJson("exists", null);
                 HttpContext.Session.SetObjectAsJson("reg_errors", ModelState.Values);
-                return RedirectToAction("register");
+                return RedirectToAction("Register");
             }
             
             //List<Dictionary<string, object>> Allq = _dbConnector.Query("SELECT * FROM quotes ORDER BY created_at Desc");
@@ -120,7 +120,7 @@ namespace connectingToDBTESTING.Controllers
         }
         [HttpGet]
         [Route("logout")]
-        public IActionResult logout(){
+        public IActionResult Logout(){
             HttpContext.Session.SetObjectAsJson("cur_user", null);
             return RedirectToAction("Index");
         }
@@ -186,7 +186,7 @@ namespace connectingToDBTESTING.Controllers
         }
         [HttpPost]
         [Route("adding")]
-        public IActionResult adding(User model)
+        public IActionResult Adding(User model)
         {
             if(ModelState.IsValid){
                 User CurrentUser = new User(){
@@ -375,7 +375,7 @@ namespace connectingToDBTESTING.Controllers
         }
         [HttpPost]
         [Route("newmessage")]
-        public IActionResult newmessage(Message model)
+        public IActionResult Newmessage(Message model)
         {
             User cur_user = HttpContext.Session.GetObjectFromJson<User>("cur_user");
             if(ModelState.IsValid){
@@ -399,7 +399,7 @@ namespace connectingToDBTESTING.Controllers
         }
         [HttpPost]
         [Route("newamessage")]
-        public IActionResult newamessage(string text, int PostedToId)
+        public IActionResult Newamessage(string text, int PostedToId)
         {
             User cur_user = HttpContext.Session.GetObjectFromJson<User>("cur_user");
             
@@ -425,7 +425,7 @@ namespace connectingToDBTESTING.Controllers
         }
         [HttpPost]
         [Route("newcomment")]
-        public IActionResult newcomment(string text, int mid, int uid, int pid)
+        public IActionResult Newcomment(string text, int mid, int uid, int pid)
         {
             User cur_user = HttpContext.Session.GetObjectFromJson<User>("cur_user");
             if(cur_user.UserId != uid){
@@ -453,7 +453,7 @@ namespace connectingToDBTESTING.Controllers
         }
         [HttpPost]
         [Route("newacomment")]
-        public IActionResult newacomment(string text, int mid, int uid, int pid)
+        public IActionResult Newacomment(string text, int mid, int uid, int pid)
         {
             User cur_user = HttpContext.Session.GetObjectFromJson<User>("cur_user");
             if(cur_user.UserId != uid){
@@ -514,7 +514,7 @@ namespace connectingToDBTESTING.Controllers
         }
         [HttpGet]
         [Route("createactivity")]
-        public IActionResult createactivity()
+        public IActionResult Createactivity()
         {
             if(HttpContext.Session.GetObjectFromJson<User>("cur_user")==null){
                 return RedirectToAction("Index");
@@ -529,7 +529,7 @@ namespace connectingToDBTESTING.Controllers
         }
         [HttpPost]
         [Route("newact")]
-        public IActionResult newact(string Name, DateTime Date, int duration1, string duration2, string description, string address)
+        public IActionResult Newact(string Name, DateTime Date, int duration1, string duration2, string description, string address)
         {   
             if(HttpContext.Session.GetObjectFromJson<User>("cur_user")==null){
                 return RedirectToAction("Index");
@@ -597,7 +597,7 @@ namespace connectingToDBTESTING.Controllers
                 
                 string errors2 = "Oops, You can't create an activity. You will be in another place at that time!";
                 HttpContext.Session.SetObjectAsJson("act2_errors", errors2); 
-                return RedirectToAction("createactivity");
+                return RedirectToAction("Createactivity");
             }else{
                 string messages = string.Join("; ", ModelState.Values
                                         .SelectMany(x => x.Errors)
@@ -605,13 +605,13 @@ namespace connectingToDBTESTING.Controllers
                 Console.WriteLine(messages);
                 HttpContext.Session.SetObjectAsJson("act2_errors", null);
                 HttpContext.Session.SetObjectAsJson("act_errors", ModelState.Values);
-                return RedirectToAction("createactivity");
+                return RedirectToAction("Createactivity");
             
             }
         }
         [HttpGet]
         [Route("deleteact/{id}")]
-        public IActionResult deleteact(int id)
+        public IActionResult Deleteact(int id)
         {
             if(HttpContext.Session.GetObjectFromJson<User>("cur_user")==null){
                 return RedirectToAction("Index");
@@ -629,7 +629,7 @@ namespace connectingToDBTESTING.Controllers
         }
         [HttpGet]
         [Route("destroy/{id}")]
-        public IActionResult destroy(int id)
+        public IActionResult Destroy(int id)
         {
             if(HttpContext.Session.GetObjectFromJson<User>("cur_user")==null){
                 return RedirectToAction("Index");
@@ -647,7 +647,7 @@ namespace connectingToDBTESTING.Controllers
         }
         [HttpGet]
         [Route("attend/{id}")]
-        public IActionResult attend(int id)
+        public IActionResult Attend(int id)
         {
             if(HttpContext.Session.GetObjectFromJson<User>("cur_user")==null){
                 return RedirectToAction("Index");
@@ -733,7 +733,7 @@ namespace connectingToDBTESTING.Controllers
         }
         [HttpGet]
         [Route("changeyourmind/{id}")]
-        public IActionResult changeyourmind(int id)
+        public IActionResult Changeyourmind(int id)
         {
             if(HttpContext.Session.GetObjectFromJson<User>("cur_user")==null){
                 return RedirectToAction("Index");
@@ -751,7 +751,7 @@ namespace connectingToDBTESTING.Controllers
         }
         [HttpGet]
         [Route("cancel/{id}")]
-        public IActionResult cancel(int id)
+        public IActionResult Cancel(int id)
         {
             if(HttpContext.Session.GetObjectFromJson<User>("cur_user")==null){
                 return RedirectToAction("Index");
